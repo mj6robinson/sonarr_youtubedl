@@ -167,8 +167,9 @@ class SonarrYTDL(object):
         """Refresh series information from trakt and rescan disk"""
         logger.debug('Begin call Sonarr to rescan for series_id: {}'.format(series_id))
         data = {
-            "name": "RescanSeries",
-            "seriesId": str(series_id)
+            "name": "RefreshSeries",
+            "commandName": "Refresh Series",
+            "body": {"seriesIds": [series_id]},
         }
         res = self.request_put(
             "{}/{}/command".format(self.base_url, self.sonarr_api_version),
@@ -408,6 +409,9 @@ class SonarrYTDL(object):
                                 logger.debug(ytdl_format_options)
                             try:
                                 yt_dlp.YoutubeDL(ytdl_format_options).download([dlurl])
+                                if cfg['user'] != "":
+                                    uid, gid = cfg['user'].split('_') 
+                                    os.chown(ytdl_format_options.outtmpl, uid, gid)
                                 self.rescanseries(ser['id'])
                                 logger.info("      Downloaded - {}".format(eps['title']))
                             except Exception as e:
