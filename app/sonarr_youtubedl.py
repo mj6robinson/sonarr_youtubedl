@@ -167,9 +167,8 @@ class SonarrYTDL(object):
         """Refresh series information from trakt and rescan disk"""
         logger.debug('Begin call Sonarr to rescan for series_id: {}'.format(series_id))
         data = {
-            "name": "RefreshSeries",
-            "commandName": "Refresh Series",
-            "body": {"seriesIds": [series_id]},
+            "name": "RescanSeries",
+            "seriesId": series_id
         }
         res = self.request_put(
             "{}/{}/command".format(self.base_url, self.sonarr_api_version),
