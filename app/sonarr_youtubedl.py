@@ -130,11 +130,11 @@ class SonarrYTDL(object):
     def get_rename(self, series_id):
         """Return the files that need to be renamed for series with the matching ID"""
         logger.debug('Begin call Sonarr for files that need renaming for series_id: {}'.format(series_id))
-        res = self.request_get("{}/{}/rename/seriesId={}".format(
+        args = {'seriesId': series_id}
+        res = self.request_get("{}/{}/rename".format(
             self.base_url,
-            self.sonarr_api_version,
-            series_id
-        ))
+            self.sonarr_api_version
+        ), args)
         return res.json()
 
     def request_get(self, url, params=None):
@@ -207,6 +207,7 @@ class SonarrYTDL(object):
         series = self.get_series()
         matched = []
         for ser in series[:]:
+            
             for wnt in self.series:
                 if wnt['title'] == ser['title']:
                     # Set default values
@@ -438,10 +439,8 @@ class SonarrYTDL(object):
                                 logger.error("      Failed - {} - {}".format(eps['title'], e))
                         else:
                             logger.info("    {}: Missing - {}:".format(e + 1, eps['title']))
-                
                 renames = self.get_rename(ser['id'])
-                files = [rename['episodeFileId'] for rename in renames]
-                self.renamefiles(ser['id'], files)
+                self.renamefiles(ser['id'], [rename['episodeFileId'] for rename in renames])
         else:
             logger.info("Nothing to process")
 
