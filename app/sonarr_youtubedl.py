@@ -408,9 +408,6 @@ class SonarrYTDL(object):
                                 logger.debug(ytdl_format_options)
                             try:
                                 yt_dlp.YoutubeDL(ytdl_format_options).download([dlurl])
-                                if cfg['user'] != "":
-                                    uid, gid = cfg['user'].split('_') 
-                                    os.chown(ytdl_format_options.outtmpl, uid, gid)
                                 self.rescanseries(ser['id'])
                                 logger.info("      Downloaded - {}".format(eps['title']))
                             except Exception as e:
