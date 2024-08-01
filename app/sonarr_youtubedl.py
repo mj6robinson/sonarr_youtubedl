@@ -131,7 +131,7 @@ class SonarrYTDL(object):
         """Return the files that need to be renamed for series with the matching ID"""
         logger.debug('Begin call Sonarr for files that need renaming for series_id: {}'.format(series_id))
         args = {'seriesId': series_id}
-        res = self.request_get("{}/{}/".format(
+        res = self.request_get("{}/{}/rename".format(
             self.base_url,
             self.sonarr_api_version
         ), args)
@@ -248,9 +248,12 @@ class SonarrYTDL(object):
         return matched
 
     def renameepisodes(self, series):
-        logger.info("Renaming Files")            
-        renames = self.get_rename(ser['id'])
-        self.renamefiles(ser['id'], [rename['episodeFileId'] for rename in renames])
+        if len(series) != 0:
+            logger.info("Renaming Files")  
+            for ser in series[:]:
+                renames = self.get_rename(ser['id'])
+                self.renamefiles(ser['id'], [rename['episodeFileId'] for rename in renames])
+        return
 
     def getseriesepisodes(self, series):
         needed = []
@@ -459,9 +462,9 @@ class SonarrYTDL(object):
 def main():
     client = SonarrYTDL()
     series = client.filterseries()
+    client.renameepisodes(series)
     episodes = client.getseriesepisodes(series)
     client.download(series, episodes)
-    client.renameepisodes(series) 
     
     logger.info('Waiting...')
 
