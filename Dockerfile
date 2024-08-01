@@ -9,8 +9,11 @@ RUN apt-get update && \
 COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
 
-# create abc user so root isn't used
+# create media user so root isn't used
 RUN \
+	groupmod -g 1001 users && \
+	useradd -u 114 -U -d /config -s /bin/false abc && \
+	usermod -G users media && \
 # create some files / folders
 	mkdir -p /config /app /sonarr_root /logs && \
 	touch /var/lock/sonarr_youtube.lock
