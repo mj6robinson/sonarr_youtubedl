@@ -379,7 +379,6 @@ class SonarrYTDL(object):
             for s, ser in enumerate(series):
                 logger.info("  {}:".format(ser['title']))
                 for e, eps in enumerate(episodes):
-                    
                     if ser['id'] == eps['seriesId']:
                         cookies = None
                         url = ser['url']
@@ -439,6 +438,7 @@ class SonarrYTDL(object):
                                 logger.error("      Failed - {} - {}".format(eps['title'], e))
                         else:
                             logger.info("    {}: Missing - {}:".format(e + 1, eps['title']))
+                logger.info("Renaming Files")            
                 renames = self.get_rename(ser['id'])
                 self.renamefiles(ser['id'], [rename['episodeFileId'] for rename in renames])
         else:
