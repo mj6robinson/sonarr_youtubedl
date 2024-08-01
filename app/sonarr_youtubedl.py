@@ -127,6 +127,16 @@ class SonarrYTDL(object):
         ))
         return res.json()
 
+    def get_rename(self, series_id):
+        """Return the files that need to be renamed for series with the matching ID"""
+        logger.debug('Begin call Sonarr for files that need renaming for series_id: {}'.format(series_id))
+        res = self.request_get("{}/{}/rename/seriesId={}".format(
+            self.base_url,
+            self.sonarr_api_version,
+            series_id
+        ))
+        return res.json()
+
     def request_get(self, url, params=None):
         """Wrapper on the requests.get"""
         logger.debug('Begin GET with url: {}'.format(url))
@@ -168,6 +178,21 @@ class SonarrYTDL(object):
         logger.debug('Begin call Sonarr to rescan for series_id: {}'.format(series_id))
         data = {
             "name": "RescanSeries",
+            "seriesId": series_id
+        }
+        res = self.request_put(
+            "{}/{}/command".format(self.base_url, self.sonarr_api_version),
+            None,
+            data
+        )
+        return res.json()
+
+    def renamefiles(self, series_id, files):
+        """Refresh series information from trakt and rescan disk"""
+        logger.debug('Begin call Sonarr to RenameFiles for series_id: {} for files: {}'.format(series_id, files))
+        data = {
+            "name": "RenameFiles",
+            "files": files,
             "seriesId": series_id
         }
         res = self.request_put(
@@ -353,6 +378,7 @@ class SonarrYTDL(object):
             for s, ser in enumerate(series):
                 logger.info("  {}:".format(ser['title']))
                 for e, eps in enumerate(episodes):
+                    
                     if ser['id'] == eps['seriesId']:
                         cookies = None
                         url = ser['url']
@@ -396,8 +422,6 @@ class SonarrYTDL(object):
                                         'subtitleslangs': ser['subtitles_languages'],
                                         'postprocessors': postprocessors,
                                     })
-
-
                             if self.debug is True:
                                 ytdl_format_options.update({
                                     'quiet': False,
@@ -414,6 +438,10 @@ class SonarrYTDL(object):
                                 logger.error("      Failed - {} - {}".format(eps['title'], e))
                         else:
                             logger.info("    {}: Missing - {}:".format(e + 1, eps['title']))
+                
+                renames = self.get_rename(ser['id'])
+                files = [rename['episodeFileId'] for rename in renames]
+                self.renamefiles(ser['id'], files)
         else:
             logger.info("Nothing to process")
 
