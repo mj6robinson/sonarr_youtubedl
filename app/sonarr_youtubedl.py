@@ -131,7 +131,7 @@ class SonarrYTDL(object):
         """Return the files that need to be renamed for series with the matching ID"""
         logger.debug('Begin call Sonarr for files that need renaming for series_id: {}'.format(series_id))
         args = {'seriesId': series_id}
-        res = self.request_get("{}/{}/rename".format(
+        res = self.request_get("{}/{}/".format(
             self.base_url,
             self.sonarr_api_version
         ), args)
@@ -246,6 +246,11 @@ class SonarrYTDL(object):
                 logger.warn('{0} is not currently monitored'.format(ser['title']))
         del series[:]
         return matched
+
+    def renameepisodes(self, series):
+        logger.info("Renaming Files")            
+        renames = self.get_rename(ser['id'])
+        self.renamefiles(ser['id'], [rename['episodeFileId'] for rename in renames])
 
     def getseriesepisodes(self, series):
         needed = []
@@ -438,9 +443,6 @@ class SonarrYTDL(object):
                                 logger.error("      Failed - {} - {}".format(eps['title'], e))
                         else:
                             logger.info("    {}: Missing - {}:".format(e + 1, eps['title']))
-                logger.info("Renaming Files")            
-                renames = self.get_rename(ser['id'])
-                self.renamefiles(ser['id'], [rename['episodeFileId'] for rename in renames])
         else:
             logger.info("Nothing to process")
 
@@ -459,8 +461,9 @@ def main():
     series = client.filterseries()
     episodes = client.getseriesepisodes(series)
     client.download(series, episodes)
+    client.renameepisodes(series) 
+    
     logger.info('Waiting...')
-
 
 if __name__ == "__main__":
     logger.info('Initial run')
