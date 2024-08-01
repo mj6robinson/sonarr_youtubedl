@@ -11,9 +11,6 @@ RUN pip3 install -r requirements.txt
 
 # create abc user so root isn't used
 RUN \
-	groupmod -g 1000 users && \
-	useradd -u 911 -U -d /config -s /bin/false abc && \
-	usermod -G users abc && \
 # create some files / folders
 	mkdir -p /config /app /sonarr_root /logs && \
 	touch /var/lock/sonarr_youtube.lock
