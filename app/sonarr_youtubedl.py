@@ -249,10 +249,10 @@ class SonarrYTDL(object):
 
     def renameepisodes(self, series):
         if len(series) != 0:
-            logger.info("Renaming Files")  
             for ser in series[:]:
                 renames = self.get_rename(ser['id'])
                 if len(renames) != 0:
+                    logger.info('Renaming {0} episodes for {1}'.format(len(renames), ser['title']))
                     self.renamefiles(ser['id'], [rename['episodeFileId'] for rename in renames])
         return
 
