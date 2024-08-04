@@ -358,13 +358,13 @@ class SonarrYTDL(object):
             logger.debug(ytdlopts)
         return ytdlopts
 
-    def ytsearch(self, ydl_opts, playlist, key=None):
+    def ytsearch(self, ydl_opts, playlist, ie_key=None):
         try:
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 result = ydl.extract_info(
                     playlist,
                     download=False,
-                    key
+                    ie_key
                 )
         except Exception as e:
             logger.error(e)
