@@ -233,6 +233,8 @@ class SonarrYTDL(object):
                     if 'playlistreverse' in wnt:
                         if wnt['playlistreverse'] == 'False':
                             ser['playlistreverse'] = False
+                    if 'key' in wnt:
+                        ser['key'] = wnt['key']
                     if 'subtitles' in wnt:
                         ser['subtitles'] = True
                         if 'languages' in wnt['subtitles']:
@@ -356,12 +358,13 @@ class SonarrYTDL(object):
             logger.debug(ytdlopts)
         return ytdlopts
 
-    def ytsearch(self, ydl_opts, playlist):
+    def ytsearch(self, ydl_opts, playlist, key=None):
         try:
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 result = ydl.extract_info(
                     playlist,
-                    download=False
+                    download=False,
+                    key
                 )
         except Exception as e:
             logger.error(e)
@@ -394,7 +397,7 @@ class SonarrYTDL(object):
                         if 'cookies_file' in ser:
                             cookies = ser['cookies_file']
                         ydleps = self.ytdl_eps_search_opts(upperescape(eps['title']), ser['playlistreverse'], cookies)
-                        found, dlurl = self.ytsearch(ydleps, url)
+                        found, dlurl = self.ytsearch(ydleps, url, ser['key'])
                         if found:
                             logger.info("    {}: Found - {}:".format(e + 1, eps['title']))
                             ytdl_format_options = {
