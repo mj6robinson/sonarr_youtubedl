@@ -376,6 +376,7 @@ class SonarrYTDL(object):
                         for entry in result['entries']:
                             if(ydl_opts['matchtitle] in entry['title']:
                                video_url = entry.get('webpage_url')
+                               break
                     else:
                         video_url = result['entries'][0].get('webpage_url')
                 except Exception as e:
