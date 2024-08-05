@@ -374,7 +374,11 @@ class SonarrYTDL(object):
                 try:
                     if title_check:
                         for entry in result['entries']:
+                            if self.debug is True:
+                                logger.debug('Checking entry title {} against episode title {}'.format(entry['title'], ydl_opts['matchtitle]))
                             if(ydl_opts['matchtitle] in entry['title']:
+                               if self.debug is True:
+                                   logger.debug('Entry title {} matched episode title {}'.format(entry['title'], ydl_opts['matchtitle]))
                                video_url = entry.get('webpage_url')
                                break
                     else:
