@@ -139,7 +139,7 @@ def setup_logging(lf_enabled=True, lc_enabled=True, debugging=False):
     if lf_enabled:
         # setup logfile
         log_file = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'logs'))
-        log_file = os.path.abspath(log_file + '/sonarr_youtubedl.log')
+        log_file = os.path.abspath(log_file + '/sonarr_youtubedl.txt')
         loggerfile = RotatingFileHandler(
             log_file,
             maxBytes=5000000,
