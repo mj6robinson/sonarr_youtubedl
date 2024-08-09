@@ -26,7 +26,6 @@ CONFIGFILE = os.environ['CONFIGPATH']
 CONFIGPATH = CONFIGFILE.replace('config.yml', '')
 SCANINTERVAL = 60
 
-
 class SonarrYTDL(object):
 
     def __init__(self):
@@ -474,6 +473,9 @@ class SonarrYTDL(object):
 
 
 def main():
+    # setup logger
+    logger = setup_logging(True, True, args.debug)
+    
     client = SonarrYTDL()
     series = client.filterseries()
     client.renameepisodes(series)
