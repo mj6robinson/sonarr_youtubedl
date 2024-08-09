@@ -473,9 +473,6 @@ class SonarrYTDL(object):
 
 
 def main():
-    # setup logger
-    logger = setup_logging(True, True, args.debug)
-    
     client = SonarrYTDL()
     series = client.filterseries()
     client.renameepisodes(series)
