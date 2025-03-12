@@ -400,65 +400,68 @@ class SonarrYTDL(object):
             for s, ser in enumerate(series):
                 logger.info("  {}:".format(ser['title']))
                 for e, eps in enumerate(episodes):
-                    if ser['id'] == eps['seriesId']:
-                        cookies = None
-                        url = ser['url']
-                        if 'cookies_file' in ser:
-                            cookies = ser['cookies_file']
-                        ydleps = self.ytdl_eps_search_opts(upperescape(eps['title']), ser['playlistreverse'], cookies)
-                        found, dlurl = self.ytsearch(ydleps, url, ser['title_check'])
-                        if found:
-                            logger.info("    {}: Found - {}:".format(e + 1, eps['title']))
-                            ytdl_format_options = {
-                                'format': self.ytdl_format,
-                                'quiet': True,
-                                'merge-output-format': 'mp4',
-                                'outtmpl': '/sonarr_root{0}/Season {1:02d}/{2} - {1}x{3:02d} - {4}.%(ext)s'.format(
-                                    ser['path'],
-                                    eps['seasonNumber'],
-                                    ser['title'],
-                                    eps['episodeNumber'],
-                                    eps['title']
-                                ),
-                                'progress_hooks': [ytdl_hooks],
-                                'noplaylist': True,
-                            }
-                            ytdl_format_options = self.appendcookie(ytdl_format_options, cookies)
-                            if 'format' in ser:
-                                ytdl_format_options = self.customformat(ytdl_format_options, ser['format'])
-                            if 'subtitles' in ser:
-                                if ser['subtitles']:
-                                    postprocessors = []
-                                    postprocessors.append({
-                                        'key': 'FFmpegSubtitlesConvertor',
-                                        'format': 'srt',
-                                    })
-                                    postprocessors.append({
-                                        'key': 'FFmpegEmbedSubtitle',
-                                    })
+                    try:
+                        if ser['id'] == eps['seriesId']:
+                            cookies = None
+                            url = ser['url']
+                            if 'cookies_file' in ser:
+                                cookies = ser['cookies_file']
+                            ydleps = self.ytdl_eps_search_opts(upperescape(eps['title']), ser['playlistreverse'], cookies)
+                            found, dlurl = self.ytsearch(ydleps, url, ser['title_check'])
+                            if found:
+                                logger.info("    {}: Found - {}:".format(e + 1, eps['title']))
+                                ytdl_format_options = {
+                                    'format': self.ytdl_format,
+                                    'quiet': True,
+                                    'merge-output-format': 'mp4',
+                                    'outtmpl': '/sonarr_root{0}/Season {1:02d}/{2} - {1}x{3:02d} - {4}.%(ext)s'.format(
+                                        ser['path'],
+                                        eps['seasonNumber'],
+                                        ser['title'],
+                                        eps['episodeNumber'],
+                                        eps['title']
+                                    ),
+                                    'progress_hooks': [ytdl_hooks],
+                                    'noplaylist': True,
+                                }
+                                ytdl_format_options = self.appendcookie(ytdl_format_options, cookies)
+                                if 'format' in ser:
+                                    ytdl_format_options = self.customformat(ytdl_format_options, ser['format'])
+                                if 'subtitles' in ser:
+                                    if ser['subtitles']:
+                                        postprocessors = []
+                                        postprocessors.append({
+                                            'key': 'FFmpegSubtitlesConvertor',
+                                            'format': 'srt',
+                                        })
+                                        postprocessors.append({
+                                            'key': 'FFmpegEmbedSubtitle',
+                                        })
+                                        ytdl_format_options.update({
+                                            'writesubtitles': True,
+                                            'allsubtitles': True,
+                                            'writeautomaticsub': True,
+                                            'subtitleslangs': ser['subtitles_languages'],
+                                            'postprocessors': postprocessors,
+                                        })
+                                if self.debug is True:
                                     ytdl_format_options.update({
-                                        'writesubtitles': True,
-                                        'allsubtitles': True,
-                                        'writeautomaticsub': True,
-                                        'subtitleslangs': ser['subtitles_languages'],
-                                        'postprocessors': postprocessors,
+                                        'quiet': False,
+                                        'logger': YoutubeDLLogger(),
+                                        'progress_hooks': [ytdl_hooks_debug],
                                     })
-                            if self.debug is True:
-                                ytdl_format_options.update({
-                                    'quiet': False,
-                                    'logger': YoutubeDLLogger(),
-                                    'progress_hooks': [ytdl_hooks_debug],
-                                })
-                                logger.debug('Youtube-DL opts used for downloading')
-                                logger.debug(ytdl_format_options)
-                            try:
-                                yt_dlp.YoutubeDL(ytdl_format_options).download([dlurl])
-                                self.rescanseries(ser['id'])
-                                logger.info("      Downloaded - {}".format(eps['title']))
-                            except Exception as e:
-                                logger.error("      Failed - {} - {}".format(eps['title'], e))
-                        else:
-                            logger.info("    {}: Missing - {}:".format(e + 1, eps['title']))
+                                    logger.debug('Youtube-DL opts used for downloading')
+                                    logger.debug(ytdl_format_options)
+                                try:
+                                    yt_dlp.YoutubeDL(ytdl_format_options).download([dlurl])
+                                    self.rescanseries(ser['id'])
+                                    logger.info("      Downloaded - {}".format(eps['title']))
+                                except Exception as e:
+                                    logger.error("      Failed - {} - {}".format(eps['title'], e))
+                            else:
+                                logger.info("    {}: Missing - {}:".format(e + 1, eps['title']))
+                        except Exception as e:
+                            logger.error("Failed - {} - {}".format(ser['title'], e))
         else:
             logger.info("Nothing to process")
 
