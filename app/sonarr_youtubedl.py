@@ -460,8 +460,8 @@ class SonarrYTDL(object):
                                     logger.error("      Failed - {} - {}".format(eps['title'], e))
                             else:
                                 logger.info("    {}: Missing - {}:".format(e + 1, eps['title']))
-                        except Exception as e:
-                            logger.error("Failed - {} - {}".format(ser['title'], e))
+                    except Exception as e:
+                        logger.error("Failed - {} - {}".format(ser['title'], e))
         else:
             logger.info("Nothing to process")
 
