@@ -406,6 +406,9 @@ class SonarrYTDL(object):
                             url = ser['url']
                             if 'cookies_file' in ser:
                                 cookies = ser['cookies_file']
+                            title = eps['title']
+                            if ser['seriesType'] == 'daily':
+                                title = datetime.strptime(eps[''], '%y-%m-%d').strftime("%A %m/%d/%Y)
                             ydleps = self.ytdl_eps_search_opts(upperescape(eps['title']), ser['playlistreverse'], cookies)
                             found, dlurl = self.ytsearch(ydleps, url, ser['title_check'])
                             if found:
