@@ -409,10 +409,10 @@ class SonarrYTDL(object):
                             title = eps['title']
                             if ser['seriesType'] == 'daily':
                                 title = datetime.strptime(eps['airDate'], '%Y-%m-%d').strftime("%A %m/%d/%Y")
-                            ydleps = self.ytdl_eps_search_opts(upperescape(eps['title']), ser['playlistreverse'], cookies)
+                            ydleps = self.ytdl_eps_search_opts(upperescape(title), ser['playlistreverse'], cookies)
                             found, dlurl = self.ytsearch(ydleps, url, ser['title_check'])
                             if found:
-                                logger.info("    {}: Found - {}:".format(e + 1, eps['title']))
+                                logger.info("    {}: Found - {}:".format(e + 1, title))
                                 ytdl_format_options = {
                                     'format': self.ytdl_format,
                                     'quiet': True,
@@ -422,7 +422,7 @@ class SonarrYTDL(object):
                                         eps['seasonNumber'],
                                         ser['title'],
                                         eps['episodeNumber'],
-                                        eps['title']
+                                        title
                                     ),
                                     'progress_hooks': [ytdl_hooks],
                                     'noplaylist': True,
