@@ -422,7 +422,7 @@ class SonarrYTDL(object):
                                         eps['seasonNumber'],
                                         ser['title'],
                                         eps['episodeNumber'],
-                                        title
+                                        eps['title']
                                     ),
                                     'progress_hooks': [ytdl_hooks],
                                     'noplaylist': True,
@@ -458,11 +458,11 @@ class SonarrYTDL(object):
                                 try:
                                     yt_dlp.YoutubeDL(ytdl_format_options).download([dlurl])
                                     self.rescanseries(ser['id'])
-                                    logger.info("      Downloaded - {}".format(title))
+                                    logger.info("      Downloaded - {}".format(eps['title']))
                                 except Exception as e:
-                                    logger.error("      Failed - {} - {}".format(title, e))
+                                    logger.error("      Failed - {} - {}".format(eps['title'], e))
                             else:
-                                logger.info("    {}: Missing - {}:".format(e + 1, title))
+                                logger.info("    {}: Missing - {}:".format(e + 1, eps['title']))
                     except Exception as e:
                         logger.error("Failed - {} - {}".format(ser['title'], e))
         else:
