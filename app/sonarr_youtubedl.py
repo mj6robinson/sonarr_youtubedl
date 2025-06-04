@@ -462,7 +462,7 @@ class SonarrYTDL(object):
                                 except Exception as e:
                                     logger.error("      Failed - {} - {}".format(title, e))
                             else:
-                                logger.info("    {}: Missing - {}:".format(e + 1, title]))
+                                logger.info("    {}: Missing - {}:".format(e + 1, title))
                     except Exception as e:
                         logger.error("Failed - {} - {}".format(ser['title'], e))
         else:
