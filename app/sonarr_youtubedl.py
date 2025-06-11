@@ -490,7 +490,3 @@ def main():
 if __name__ == "__main__":
     logger.info('Initial run')
     main()
-    schedule.every(int(SCANINTERVAL)).minutes.do(main)
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
