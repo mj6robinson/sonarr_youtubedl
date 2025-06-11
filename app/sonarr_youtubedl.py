@@ -479,6 +479,7 @@ def main():
     series = client.filterseries()
     episodes = client.getseriesepisodes(series)
     client.download(series, episodes)
+    series = client.filterseries()
     client.renameepisodes(series)
 
 if __name__ == "__main__":
