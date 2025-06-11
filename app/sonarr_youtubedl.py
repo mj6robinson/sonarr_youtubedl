@@ -476,11 +476,9 @@ class SonarrYTDL(object):
 def main():
     client = SonarrYTDL()
     series = client.filterseries()
-    client.renameepisodes(series)
     episodes = client.getseriesepisodes(series)
     client.download(series, episodes)
-    
-    logger.info('Waiting...')
+    client.renameepisodes(series)
 
 if __name__ == "__main__":
     logger.info('Initial run')
