@@ -361,7 +361,7 @@ class SonarrYTDL(object):
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 result = ydl.extract_info(
                     playlist,
-                    download==False,
+                    download=False
                 )
         except Exception as e:
             logger.error(e)
