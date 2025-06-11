@@ -33,23 +33,18 @@ class SonarrYTDL(object):
         cfg = checkconfig()
 
         # Sonarr_YTDL Setup
-
         try:
-            self.set_scan_interval(cfg['sonarrytdl']['scan_interval'])
-            try:
-                self.debug = cfg['sonarrytdl']['debug'] in ['true', 'True']
-                if self.debug:
-                    logger.setLevel(logging.DEBUG)
-                    for logs in logger.handlers:
-                        if logs.name == 'FileHandler':
-                            logs.setLevel(logging.DEBUG)
-                        if logs.name == 'StreamHandler':
-                            logs.setLevel(logging.DEBUG)
-                    logger.debug('DEBUGGING ENABLED')
-            except AttributeError:
-                self.debug = False
-        except Exception:
-            sys.exit("Error with sonarrytdl config.yml values.")
+            self.debug = cfg['sonarrytdl']['debug'] in ['true', 'True']
+            if self.debug:
+                logger.setLevel(logging.DEBUG)
+                for logs in logger.handlers:
+                    if logs.name == 'FileHandler':
+                        logs.setLevel(logging.DEBUG)
+                    if logs.name == 'StreamHandler':
+                        logs.setLevel(logging.DEBUG)
+                logger.debug('DEBUGGING ENABLED')
+        except AttributeError:
+            self.debug = False
 
         # Sonarr Setup
         try:
