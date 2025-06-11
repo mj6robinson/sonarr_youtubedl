@@ -390,7 +390,8 @@ class SonarrYTDL(object):
             else:
                 return True, video_url
 
-    def download(self, series, episodes):
+    def download(self, sers, episodes):
+        series = sers.view()
         if len(series) != 0:
             logger.info("Processing Wanted Downloads")
             for s, ser in enumerate(series):
@@ -479,7 +480,6 @@ def main():
     series = client.filterseries()
     episodes = client.getseriesepisodes(series)
     client.download(series, episodes)
-    series = client.filterseries()
     client.renameepisodes(series)
 
 if __name__ == "__main__":
