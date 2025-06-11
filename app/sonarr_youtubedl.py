@@ -359,7 +359,7 @@ class SonarrYTDL(object):
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 result = ydl.extract_info(
                     playlist,
-                    download=False,
+                   =False,
                 )
         except Exception as e:
             logger.error(e)
@@ -390,8 +390,7 @@ class SonarrYTDL(object):
             else:
                 return True, video_url
 
-    def download(self, sers, episodes):
-        series = sers.view()
+    def download(self, series, episodes):
         if len(series) != 0:
             logger.info("Processing Wanted Downloads")
             for s, ser in enumerate(series):
@@ -480,6 +479,7 @@ def main():
     series = client.filterseries()
     episodes = client.getseriesepisodes(series)
     client.download(series, episodes)
+    series = client.filterseries()
     client.renameepisodes(series)
 
 if __name__ == "__main__":
