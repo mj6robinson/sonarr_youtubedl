@@ -483,5 +483,5 @@ def main():
     client.renameepisodes(series)
 
 if __name__ == "__main__":
-    logger.info('Initial run')
+    logger.info('Runnning')
     main()
