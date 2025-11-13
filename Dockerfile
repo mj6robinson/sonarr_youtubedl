@@ -6,6 +6,7 @@ RUN sed -i 's|deb.debian.org/debian|archive.debian.org/debian|g' /etc/apt/source
 RUN sed -i 's|security.debian.org/debian-security|archive.debian.org/debian-security|g' /etc/apt/sources.list
 RUN apt-get update 
 RUN apt-get install -y ffmpeg 
+RUN pip install --upgrade pip
 
 # Copy and install requirements
 COPY requirements.txt requirements.txt
