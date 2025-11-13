@@ -7,10 +7,7 @@ on:
 jobs:
 
   build:
-
     runs-on: ubuntu-latest
-    container:
-      image: debian:bullseye
 
     steps:
     - name: Check out the repo
@@ -25,6 +22,6 @@ jobs:
     - name: Build and push to dockerhub
       uses: docker/build-push-action@v6
       with:
-       context:
+       context: .
        push: true
        tags: mj6robinson/sonarr_youtubedl:latest
