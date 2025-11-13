@@ -2,10 +2,6 @@ FROM python:3.9-buster
 LABEL maintainer="Martin Jones <whatdaybob@outlook.com>"
 
 # Update and install ffmpeg
-RUN apt-get remove ffmpeg
-RUN apt-get clean
-RUN apt-get autoclean
-RUN apt-get update
 RUN apt-get install -y ffmpeg 
 
 # Copy and install requirements
