@@ -4,7 +4,6 @@ LABEL maintainer="Martin Jones <whatdaybob@outlook.com>"
 # Update and install ffmpeg
 RUN echo "deb http://archive.debian.org/debian stretch main contrib non-free" > /etc/apt/sources.list 
 RUN apt-get remove ffmpeg
-RUN apt-get remove libavdevice57
 RUN apt-get clean
 RUN apt-get autoclean
 RUN apt-get update
