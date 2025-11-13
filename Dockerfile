@@ -2,8 +2,8 @@ FROM python:3.9-buster
 LABEL maintainer="Martin Jones <whatdaybob@outlook.com>"
 
 # Update and install ffmpeg
-RUN echo "deb http://archive.debian.org/debian stretch main contrib non-free" > /etc/apt/sources.list && \ 
-    apt-get update && \
+RUN echo "deb http://archive.debian.org/debian stretch main contrib non-free" > /etc/apt/sources.list 
+RUN apt-get update && \
     apt-get install -y ffmpeg 
 
 # Copy and install requirements
