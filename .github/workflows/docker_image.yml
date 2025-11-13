@@ -10,7 +10,7 @@ jobs:
 
     runs-on: ubuntu-latest
     container:
-      image: debian:bookworm
+      image: debian:bullseye
 
     steps:
     - name: Check out the repo
