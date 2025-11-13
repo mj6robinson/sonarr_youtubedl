@@ -3,8 +3,8 @@ LABEL maintainer="Martin Jones <whatdaybob@outlook.com>"
 
 # Update and install ffmpeg
 RUN echo "deb http://archive.debian.org/debian stretch main contrib non-free" > /etc/apt/sources.list 
-RUN apt-get update && \
-    apt-get install -y ffmpeg 
+RUN apt-get update
+RUN apt-get install -y ffmpeg 
 
 # Copy and install requirements
 COPY requirements.txt requirements.txt
