@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:latest
 LABEL maintainer="Martin Jones <whatdaybob@outlook.com>"
 
 # Update and install ffmpeg
