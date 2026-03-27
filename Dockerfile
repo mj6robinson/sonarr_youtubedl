@@ -1,4 +1,4 @@
-FROM python:3.11.15-trixie
+FROM python:3.11-trixie
 LABEL maintainer="Martin Jones <whatdaybob@outlook.com>"
 
 # Update and install ffmpeg
