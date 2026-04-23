@@ -344,7 +344,6 @@ class SonarrYTDL(object):
             'matchtitle': regextitle,
             'quiet': True,
             'proxy': proxy,
-
         }
         if self.debug is True:
             ytdlopts.update({
@@ -410,6 +409,14 @@ class SonarrYTDL(object):
                             if ser['seriesType'] == 'daily':
                                 title = datetime.strptime(eps['airDate'], '%Y-%m-%d').strftime("%-d/%-m/%Y")
                             ydleps = self.ytdl_eps_search_opts(upperescape(title), ser['playlistreverse'], cookies, ser['proxy'])
+                            if 'username' in ser:
+                                ytdl_eps_search_opts.update({
+                                    username: ser['format']
+                                })
+                            if 'password' in ser:
+                                ytdl_eps_search_opts.update({
+                                    username: ser['password']
+                                })
                             found, dlurl = self.ytsearch(ydleps, url, ser['title_check'])
                             if found:
                                 logger.info("    {}: Found - {}:".format(e + 1, title))
@@ -431,6 +438,14 @@ class SonarrYTDL(object):
                                 ytdl_format_options = self.appendcookie(ytdl_format_options, cookies)
                                 if 'format' in ser:
                                     ytdl_format_options = self.customformat(ytdl_format_options, ser['format'])
+                                if 'username' in ser:
+                                    ytdl_format_options.update({
+                                        username: ser['format']
+                                    })
+                                if 'password' in ser:
+                                    ytdl_format_options.update({
+                                        username: ser['password']
+                                    })
                                 if 'subtitles' in ser:
                                     if ser['subtitles']:
                                         postprocessors = []
